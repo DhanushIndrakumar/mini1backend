@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +57,31 @@ public class UserService {
             userResponseList.add(userResponse);
         }
         return userResponseList;
+    }
+
+    public String deleteUserById(int userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            userRepository.deleteById(userId);
+            return "User successfully deleted";
+        } else {
+            return "User not found";
+        }
+    }
+
+    public UserResponse updateUserById(RegisterRequest registerRequest, int userId) {
+       User user=userRepository.findById(userId).orElseThrow();
+       user.setUserFirstName(registerRequest.getUserFirstName());
+       user.setUserLastName(registerRequest.getUserLastName());
+       user.setUserEmail(registerRequest.getUserEmail());
+       user.setPhone(registerRequest.getPhone());
+       userRepository.save(user);
+       UserResponse userResponse=new UserResponse();
+       userResponse.setUserId(user.getUserId());
+       userResponse.setUserFirstName(user.getUserFirstName());
+       userResponse.setUserLastName(user.getUserLastName());
+       userResponse.setUserEmail(user.getUserEmail());
+       userResponse.setPhone(user.getPhone());
+       return userResponse;
     }
 }

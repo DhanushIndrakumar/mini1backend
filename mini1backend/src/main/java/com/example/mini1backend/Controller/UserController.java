@@ -31,6 +31,16 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @DeleteMapping("deleteUserById/{userId}")
+    public String deleteUserById(@PathVariable int userId){
+        return userService.deleteUserById(userId);
+    }
+
+    @PutMapping("updateUserById/{userId}")
+    public UserResponse updateUserId(@RequestBody RegisterRequest registerRequest,@PathVariable int userId){
+        return userService.updateUserById(registerRequest,userId);
+    }
+
 
 
 }
